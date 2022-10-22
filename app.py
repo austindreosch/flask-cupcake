@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///adopt'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///cupcakes'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = "chickenzarecool21837"
@@ -13,7 +13,16 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
+db.create_all()
 
+
+@app.route('/')
+def list_users():
+    """Shows list of all pets in db, on the main directory.
+    """
+
+    cupcakes = Cupcake.query.all()
+    return render_template('list.html', cupcakes=cupcakes)
 
 # GET /api/cupcakes
 # Get data about all cupcakes.
